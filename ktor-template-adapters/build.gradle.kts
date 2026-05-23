@@ -13,6 +13,10 @@ application {
     mainClass.set("com.yonatankarp.ktor.template.ApplicationKt")
 }
 
+tasks.named<JavaExec>("run") {
+    args = listOf("-config=application-dev.yaml")
+}
+
 ktor {
     fatJar {
         archiveFileName.set("ktor-template.jar")

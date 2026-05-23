@@ -15,17 +15,20 @@ fun Application.configureDatabase() {
     val cfg = environment.config.config("database")
     val dataSource = createDataSource(cfg)
 
-    runMigrations(dataSource)
-    Database.connect(dataSource)
+    runCatching {
+        runMigrations(dataSource)
+        Database.connect(dataSource)
 
-    dependencies {
-        provide<DataSource> { dataSource }
-    }
+        dependencies {
+            provide<DataSource> { dataSource }
+        }
 
-    monitor.subscribe(ApplicationStopping) {
-        log.info("Closing database connection pool")
-        dataSource.close()
-    }
+        monitor.subscribe(ApplicationStopping) {
+            log.info("Closing database connection pool")
+            dataSource.close()
+        }
+    }.onFailure { dataSource.close() }
+        .getOrThrow()
 }
 
 private fun createDataSource(config: ApplicationConfig): HikariDataSource {
