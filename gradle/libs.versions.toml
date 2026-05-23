@@ -5,6 +5,7 @@ flyway = "12.6.2"
 jacoco = "0.8.13"
 hikari = "7.0.2"
 jvmTarget = "25"
+kotest = "6.1.2"
 kotlin = "2.3.21"
 ktor = "3.5.0"
 logback = "1.5.32"
@@ -49,11 +50,11 @@ micrometer_prometheus = { module = "io.micrometer:micrometer-registry-prometheus
 
 # Tests
 ktor_server_test_host = { module = "io.ktor:ktor-server-test-host", version.ref = "ktor" }
-kotlin_test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+kotest_runner_junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
+kotest_assertions_core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 testcontainers_bom = { module = "org.testcontainers:testcontainers-bom", version.ref = "testcontainers" }
 testcontainers_postgres = { module = "org.testcontainers:testcontainers-postgresql" }
-testcontainers_junit = { module = "org.testcontainers:testcontainers-junit-jupiter" }
 
 [plugins]
 
@@ -97,10 +98,19 @@ persistence_all = [
     "postgresql",
 ]
 
-test_all = [
-    "ktor_server_test_host",
-    "kotlin_test",
+# Base test stack — applied automatically via ktor-template.kotlin-conventions
+# to every module. Pure Kotlin: Kotest + MockK. No Ktor, no Testcontainers.
+test_unit = [
+    "kotest_runner_junit5",
+    "kotest_assertions_core",
     "mockk",
-    "testcontainers_junit",
+]
+
+# Integration extras — what's needed ON TOP of test_unit for modules that boot
+# Ktor or spin up containers. Applied via ktor-template.integration-test-conventions,
+# which also applies kotlin-conventions so test_unit comes along for free.
+# No overlap with test_unit, so no drift.
+test_integration_extras = [
+    "ktor_server_test_host",
     "testcontainers_postgres",
 ]

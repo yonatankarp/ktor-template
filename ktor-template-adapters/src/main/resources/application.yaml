@@ -6,3 +6,9 @@ ktor:
     modules:
       - com.yonatankarp.ktor.template.ApplicationKt.module
   environment: ${KTOR_ENV:-dev}
+
+database:
+  url: ${DB_URL:-jdbc:postgresql://localhost:5432/ktor-template}
+  username: ${DB_USERNAME:-postgres}
+  password: ${DB_PASSWORD:-secret}
+  maximumPoolSize: ${DB_POOL_SIZE:-10}
