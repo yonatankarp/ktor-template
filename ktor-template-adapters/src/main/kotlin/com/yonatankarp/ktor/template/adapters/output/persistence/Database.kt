@@ -11,13 +11,6 @@ import org.flywaydb.core.Flyway
 import org.jetbrains.exposed.v1.jdbc.Database
 import javax.sql.DataSource
 
-/**
- * Wires the persistence stack: Hikari connection pool, Flyway migrations,
- * and Exposed's default Database. Registers the [DataSource] with Ktor DI
- * and closes the pool on application shutdown.
- *
- * Configuration is read from the `database` section of `application.yaml`.
- */
 fun Application.configureDatabase() {
     val cfg = environment.config.config("database")
     val dataSource = createDataSource(cfg)
