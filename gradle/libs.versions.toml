@@ -1,0 +1,106 @@
+[versions]
+
+exposed = "0.61.0"
+flyway = "11.8.2"
+jacoco = "0.8.13"
+hikari = "6.3.0"
+jvmTarget = "25"
+kotlin = "2.3.21"
+ktor = "3.5.0"
+logback = "1.5.18"
+micrometer = "1.15.0"
+mockk = "1.14.3"
+postgres = "42.7.7"
+spotless = "8.5.1"
+testcontainers = "2.0.5"
+
+[libraries]
+
+# Ktor server
+ktor_server_core = { module = "io.ktor:ktor-server-core", version.ref = "ktor" }
+ktor_server_netty = { module = "io.ktor:ktor-server-netty", version.ref = "ktor" }
+ktor_server_config_yaml = { module = "io.ktor:ktor-server-config-yaml", version.ref = "ktor" }
+ktor_server_content_negotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor" }
+ktor_server_status_pages = { module = "io.ktor:ktor-server-status-pages", version.ref = "ktor" }
+ktor_server_call_logging = { module = "io.ktor:ktor-server-call-logging", version.ref = "ktor" }
+ktor_server_call_id = { module = "io.ktor:ktor-server-call-id", version.ref = "ktor" }
+ktor_server_default_headers = { module = "io.ktor:ktor-server-default-headers", version.ref = "ktor" }
+ktor_server_cors = { module = "io.ktor:ktor-server-cors", version.ref = "ktor" }
+ktor_server_auth = { module = "io.ktor:ktor-server-auth", version.ref = "ktor" }
+ktor_server_auth_jwt = { module = "io.ktor:ktor-server-auth-jwt", version.ref = "ktor" }
+ktor_server_metrics_micrometer = { module = "io.ktor:ktor-server-metrics-micrometer", version.ref = "ktor" }
+ktor_server_di = { module = "io.ktor:ktor-server-di", version.ref = "ktor" }
+ktor_server_swagger = { module = "io.ktor:ktor-server-swagger", version.ref = "ktor" }
+ktor_server_openapi = { module = "io.ktor:ktor-server-openapi", version.ref = "ktor" }
+ktor_serialization_kotlinx_json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+
+# Persistence
+exposed_core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
+exposed_jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed" }
+exposed_kotlin_datetime = { module = "org.jetbrains.exposed:exposed-kotlin-datetime", version.ref = "exposed" }
+flyway_core = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
+flyway_postgres = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flyway" }
+hikari = { module = "com.zaxxer:HikariCP", version.ref = "hikari" }
+postgresql = { module = "org.postgresql:postgresql", version.ref = "postgres" }
+
+# Observability
+logback_classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
+micrometer_prometheus = { module = "io.micrometer:micrometer-registry-prometheus", version.ref = "micrometer" }
+
+# Tests
+ktor_server_test_host = { module = "io.ktor:ktor-server-test-host", version.ref = "ktor" }
+kotlin_test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+testcontainers_bom = { module = "org.testcontainers:testcontainers-bom", version.ref = "testcontainers" }
+testcontainers_postgres = { module = "org.testcontainers:testcontainers-postgresql" }
+testcontainers_junit = { module = "org.testcontainers:testcontainers-junit-jupiter" }
+
+[plugins]
+
+kotlin_jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin_serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+
+[bundles]
+
+ktor_server_core_all = [
+    "ktor_server_core",
+    "ktor_server_netty",
+    "ktor_server_config_yaml",
+    "ktor_server_content_negotiation",
+    "ktor_server_status_pages",
+    "ktor_server_call_logging",
+    "ktor_server_call_id",
+    "ktor_server_default_headers",
+    "ktor_server_cors",
+    "ktor_serialization_kotlinx_json",
+]
+
+ktor_server_observability_all = [
+    "ktor_server_metrics_micrometer",
+    "micrometer_prometheus",
+]
+
+ktor_server_auth_all = [
+    "ktor_server_auth",
+    "ktor_server_auth_jwt",
+]
+
+persistence_all = [
+    "exposed_core",
+    "exposed_jdbc",
+    "exposed_kotlin_datetime",
+    "flyway_core",
+    "flyway_postgres",
+    "hikari",
+    "postgresql",
+]
+
+test_all = [
+    "ktor_server_test_host",
+    "kotlin_test",
+    "mockk",
+    "testcontainers_junit",
+    "testcontainers_postgres",
+]
