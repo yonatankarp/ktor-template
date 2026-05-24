@@ -16,6 +16,8 @@ kotlin {
     compilerOptions {
         // TODO(kotlin 2.4): explicit backing fields are expected to stabilize in 2.4 — drop this flag once we upgrade.
         freeCompilerArgs.add("-Xexplicit-backing-fields")
+        // TODO(kotlin 2.4): kotlin.uuid.Uuid is expected to stabilize in 2.4 — drop this opt-in once we upgrade.
+        freeCompilerArgs.add("-opt-in=kotlin.uuid.ExperimentalUuidApi")
     }
 }
 

@@ -27,6 +27,7 @@ dependencies {
     implementation(project(":ktor-template-application"))
 
     implementation(libs.bundles.ktor.server.core.all)
+    implementation(libs.bundles.ktor.server.observability.all)
     implementation(libs.ktor.server.di)
     implementation(libs.bundles.persistence.all)
     implementation(libs.logback.classic)
