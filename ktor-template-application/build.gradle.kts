@@ -9,7 +9,7 @@ plugins {
 // adapters that implement those ports against real infrastructure.
 
 dependencies {
-    implementation(project(":ktor-template-domain"))
+    api(project(":ktor-template-domain"))
 
     testImplementation(libs.bundles.test.unit)
 }
