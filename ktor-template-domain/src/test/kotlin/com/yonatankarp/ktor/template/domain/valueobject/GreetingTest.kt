@@ -8,14 +8,30 @@ import io.kotest.matchers.shouldNotBe
 class GreetingTest :
     FunSpec({
 
-        test("accepts valid BCP-47 language codes") {
-            listOf("en", "fr", "ja", "pt-BR", "en-US", "zh-CN").forEach { language ->
+        test("accepts valid BCP-47 language tags") {
+            listOf(
+                "en",
+                "fr",
+                "ja",
+                "pt-BR",
+                "en-US",
+                "en-us",
+                "zh-Hant",
+                "zh-Hant-CN",
+                "sr-Latn-RS",
+                "es-419",
+            ).forEach { language ->
                 Greeting(language = language, message = "Hello").language shouldBe language
             }
         }
 
-        test("rejects invalid language codes") {
-            listOf("EN", "english", "e", "eng", "en_US", "en-us", "EN-US", "", "  ").forEach { language ->
+        test("rejects invalid language tags") {
+            listOf(
+                "e",
+                "en_US",
+                "",
+                "   ",
+            ).forEach { language ->
                 shouldThrow<IllegalArgumentException> {
                     Greeting(language = language, message = "Hi")
                 }

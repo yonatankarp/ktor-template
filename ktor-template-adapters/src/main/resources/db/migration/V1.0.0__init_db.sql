@@ -1,7 +1,7 @@
 CREATE TABLE greeting (
     id       SERIAL PRIMARY KEY,
-    language VARCHAR(10) NOT NULL,
-    message  TEXT        NOT NULL,
+    language VARCHAR(35) NOT NULL CHECK (btrim(language) <> ''),
+    message  TEXT        NOT NULL CHECK (btrim(message) <> ''),
     UNIQUE (language, message)
 );
 
