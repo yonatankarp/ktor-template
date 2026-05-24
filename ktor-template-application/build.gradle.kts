@@ -11,6 +11,5 @@ plugins {
 dependencies {
     implementation(project(":ktor-template-domain"))
 
-    testImplementation(libs.kotlin.test)
-    testImplementation(libs.mockk)
+    testImplementation(libs.bundles.test.unit)
 }

@@ -10,5 +10,5 @@ plugins {
 // this is a separate Gradle module.
 
 dependencies {
-    testImplementation(libs.kotlin.test)
+    testImplementation(libs.bundles.test.unit)
 }

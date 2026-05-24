@@ -5,10 +5,10 @@ ktor:
   application:
     modules:
       - com.yonatankarp.ktor.template.ApplicationKt.module
-  environment: ${KTOR_ENV}
+  environment: dev
 
 database:
-  url: ${DB_URL}
-  username: ${DB_USERNAME}
-  password: ${DB_PASSWORD}
-  maximumPoolSize: ${DB_POOL_SIZE:-10}
+  url: jdbc:postgresql://localhost:5432/ktor-template
+  username: postgres
+  password: secret
+  maximumPoolSize: 10
