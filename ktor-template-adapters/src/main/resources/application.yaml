@@ -11,4 +11,4 @@ database:
   url: ${DB_URL}
   username: ${DB_USERNAME}
   password: ${DB_PASSWORD}
-  maximumPoolSize: ${DB_POOL_SIZE:-10}
+  maximumPoolSize: ${DB_POOL_SIZE}

@@ -45,7 +45,7 @@ jobs:
           cache-read-only: ${{ github.ref != 'refs/heads/main' }}
 
       - name: Build
-        run: ./gradlew build --no-daemon
+        run: ./gradlew build
 
       - name: Publish test results
         if: always()
