@@ -6,12 +6,11 @@ import com.yonatankarp.ktor.template.domain.event.GreetingDelivered
 import com.yonatankarp.ktor.template.domain.valueobject.Greeting
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import io.mockk.Runs
 import io.mockk.coEvery
-import io.mockk.coVerify
-import io.mockk.just
+import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
+import io.mockk.verify
 
 class GreetUseCaseTest :
     FunSpec({
@@ -23,7 +22,7 @@ class GreetUseCaseTest :
             val expected = Greeting(language = "fr", message = "Bonjour")
             coEvery { catalog.random() } returns expected
             val published = slot<GreetingDelivered>()
-            coEvery { events.publish(capture(published)) } just Runs
+            every { events.publish(capture(published)) } returns true
             val useCase = GreetUseCase(catalog, events)
 
             // When
@@ -31,7 +30,7 @@ class GreetUseCaseTest :
 
             // Then
             result shouldBe expected
-            coVerify { events.publish(any()) }
+            verify { events.publish(any()) }
             published.captured.greeting shouldBe expected
         }
 
@@ -41,7 +40,7 @@ class GreetUseCaseTest :
             val events = mockk<EventPublisher<GreetingDelivered>>()
             coEvery { catalog.random() } returns null
             val published = slot<GreetingDelivered>()
-            coEvery { events.publish(capture(published)) } just Runs
+            every { events.publish(capture(published)) } returns true
             val useCase = GreetUseCase(catalog, events)
 
             // When
@@ -49,7 +48,7 @@ class GreetUseCaseTest :
 
             // Then
             result shouldBe Greeting(language = "en", message = "Hello, World!")
-            coVerify { events.publish(any()) }
+            verify { events.publish(any()) }
             published.captured.greeting shouldBe result
         }
     })
