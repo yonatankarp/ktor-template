@@ -98,19 +98,13 @@ persistence_all = [
     "postgresql",
 ]
 
-# Base test stack — applied automatically via ktor-template.kotlin-conventions
-# to every module. Pure Kotlin: Kotest + MockK. No Ktor, no Testcontainers.
 test_unit = [
     "kotest_runner_junit5",
     "kotest_assertions_core",
     "mockk",
 ]
 
-# Integration extras — what's needed ON TOP of test_unit for modules that boot
-# Ktor or spin up containers. Applied via ktor-template.integration-test-conventions,
-# which also applies kotlin-conventions so test_unit comes along for free.
-# No overlap with test_unit, so no drift.
-test_integration_extras = [
+test_integration = [
     "ktor_server_test_host",
     "testcontainers_postgres",
 ]

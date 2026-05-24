@@ -45,7 +45,7 @@ For the C4 diagram of the architecture see [`docs/c4/README.md`](./docs/c4/READM
 - HikariCP + Flyway + Exposed (DSL, `newSuspendedTransaction`) against Postgres
 - `ContentNegotiation` (kotlinx-serialization JSON), `StatusPages`-ready
 - Observability: `CallId` (X-Request-Id with UUID generation), `CallLogging` (with MDC + configurable quiet-paths), Micrometer + Prometheus `/metrics` endpoint with JVM and process meter binders
-- Kotest + MockK test stack; non-overlapping `test_unit` / `test_integration_extras` bundles so domain stays container-free even in tests
+- Kotest + MockK test stack; non-overlapping `test_unit` / `test_integration` bundles so domain stays container-free even in tests
 - Testcontainers Postgres in `ktor-template-adapters` integration tests
 - One demo feature flowing through all three layers: `GET /greetings/random` against a seeded `greeting` table
 - Self-contained CI: `build`, `codeql`, `generate-c4-diagram` workflows; Dependabot auto-merge for semver-minor/patch

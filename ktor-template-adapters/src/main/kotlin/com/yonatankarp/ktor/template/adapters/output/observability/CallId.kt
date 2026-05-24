@@ -10,9 +10,7 @@ fun Application.configureCallId() {
     install(CallId) {
         retrieveFromHeader(HttpHeaders.XRequestId)
         generate { Uuid.random().toString() }
-        verify { it.isNotEmpty() && it.length <= CALL_ID_MAX_LENGTH }
+        verify { it.isNotEmpty() }
         header(HttpHeaders.XRequestId)
     }
 }
-
-private const val CALL_ID_MAX_LENGTH = 64

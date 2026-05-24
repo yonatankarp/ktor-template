@@ -23,7 +23,6 @@ kotlin {
 
 tasks.test {
     useJUnitPlatform()
-    finalizedBy("spotlessApply")
 }
 
 spotless {

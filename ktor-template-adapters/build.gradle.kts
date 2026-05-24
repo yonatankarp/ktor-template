@@ -34,5 +34,5 @@ dependencies {
 
     testImplementation(platform(libs.testcontainers.bom))
     testImplementation(libs.bundles.test.unit)
-    testImplementation(libs.bundles.test.integration.extras)
+    testImplementation(libs.bundles.test.integration)
 }
