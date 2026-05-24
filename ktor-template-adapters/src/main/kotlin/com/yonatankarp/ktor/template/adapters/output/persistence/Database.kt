@@ -11,6 +11,8 @@ import org.flywaydb.core.Flyway
 import org.jetbrains.exposed.v1.jdbc.Database
 import javax.sql.DataSource
 
+private const val DEFAULT_MAX_POOL_SIZE = 10
+
 fun Application.configureDatabase() {
     val cfg = environment.config.config("database")
     val dataSource = createDataSource(cfg)
@@ -38,7 +40,7 @@ private fun createDataSource(config: ApplicationConfig): HikariDataSource {
             username = config.property("username").getString()
             password = config.property("password").getString()
             maximumPoolSize =
-                config.propertyOrNull("maximumPoolSize")?.getString()?.toInt() ?: 10
+                config.propertyOrNull("maximumPoolSize")?.getString()?.toInt() ?: DEFAULT_MAX_POOL_SIZE
             isAutoCommit = false
             transactionIsolation = "TRANSACTION_READ_COMMITTED"
             poolName = "ktor-template-pool"
