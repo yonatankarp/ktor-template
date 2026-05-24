@@ -14,7 +14,7 @@ application {
 }
 
 tasks.named<JavaExec>("run") {
-    args = listOf("-config=application-dev.yaml")
+    args = listOf("-config=classpath:application-dev.yaml")
 }
 
 ktor {
