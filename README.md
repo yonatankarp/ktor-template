@@ -6,29 +6,46 @@
 [codeql-state]: https://github.com/yonatankarp/ktor-template/actions/workflows/codeql.yml
 [license-badge]: https://img.shields.io/badge/License-MIT-yellow.svg
 [license-link]: https://opensource.org/licenses/MIT
+[ktor-badge]: https://img.shields.io/badge/Ktor-3-orange?logo=ktor&logoColor=white
+[ktor-link]: https://ktor.io/
+[kotlin-badge]: https://img.shields.io/badge/Kotlin-2-7F52FF?logo=kotlin&logoColor=white
+[kotlin-link]: https://kotlinlang.org/
+[jdk-badge]: https://img.shields.io/badge/JDK-25-007396?logo=openjdk&logoColor=white
+[jdk-link]: https://openjdk.org/
+[gradle-badge]: https://img.shields.io/badge/Gradle-9-02303A?logo=gradle&logoColor=white
+[gradle-link]: https://gradle.org/
+[postgres-badge]: https://img.shields.io/badge/Postgres-18-336791?logo=postgresql&logoColor=white
+[postgres-link]: https://www.postgresql.org/
+[exposed-badge]: https://img.shields.io/badge/Exposed-1-7F52FF?logo=jetbrains&logoColor=white
+[exposed-link]: https://github.com/JetBrains/Exposed
+[kotest-badge]: https://img.shields.io/badge/Kotest-6-3DA639
+[kotest-link]: https://kotest.io/
 
 | **Type**     | **Status**                                                                                  |
 |--------------|---------------------------------------------------------------------------------------------|
 | CI pipelines | [![Build][build-badge]][build-state] [![CodeQL][codeql-badge]][codeql-state]                |
+| Stack        | [![Ktor][ktor-badge]][ktor-link] [![Kotlin][kotlin-badge]][kotlin-link] [![JDK][jdk-badge]][jdk-link] [![Gradle][gradle-badge]][gradle-link] [![Postgres][postgres-badge]][postgres-link] [![Exposed][exposed-badge]][exposed-link] [![Kotest][kotest-badge]][kotest-link] |
 | License      | [![License: MIT][license-badge]][license-link]                                              |
+
+Pinned versions live in [`gradle/libs.versions.toml`](./gradle/libs.versions.toml) — badges show the major-version line.
 
 ## Purpose
 
-A template for bootstrapping new Ktor 3.x web services with the same operational baseline as [`kotlin-spring-boot-template`](https://github.com/yonatankarp/kotlin-spring-boot-template), so a new service has CI, Docker, Postgres, observability, and architectural discipline from minute one instead of after the first sprint.
+A template for bootstrapping new Ktor web services with the same operational baseline as [`kotlin-spring-boot-template`](https://github.com/yonatankarp/kotlin-spring-boot-template), so a new service has CI, Docker, Postgres, observability, and architectural discipline from minute one instead of after the first sprint.
 
 For the C4 diagram of the architecture see [`docs/c4/README.md`](./docs/c4/README.md).
 
 ## What's inside
 
-- Ktor 3.5 server (Netty engine) on JDK 25, Kotlin 2.3
+- Ktor server (Netty engine) on JDK 25, Kotlin
 - Multi-module Gradle build with hexagonal architecture enforced at compile time:
   - `ktor-template-domain/` — pure Kotlin, zero framework dependencies
   - `ktor-template-application/` — input/output ports + use cases, framework-free
   - `ktor-template-adapters/` — Ktor routes, Exposed catalogs, observability subscribers, DI wiring
-- HikariCP + Flyway + Exposed 1.3 (DSL, `newSuspendedTransaction`) against Postgres 18
+- HikariCP + Flyway + Exposed (DSL, `newSuspendedTransaction`) against Postgres
 - `ContentNegotiation` (kotlinx-serialization JSON), `StatusPages`-ready
 - Observability: `CallId` (X-Request-Id with UUID generation), `CallLogging` (with MDC + configurable quiet-paths), Micrometer + Prometheus `/metrics` endpoint with JVM and process meter binders
-- Kotest 6 + MockK 1.14 test stack; non-overlapping `test_unit` / `test_integration_extras` bundles so domain stays container-free even in tests
+- Kotest + MockK test stack; non-overlapping `test_unit` / `test_integration_extras` bundles so domain stays container-free even in tests
 - Testcontainers Postgres in `ktor-template-adapters` integration tests
 - One demo feature flowing through all three layers: `GET /greetings/random` against a seeded `greeting` table
 - Self-contained CI: `build`, `codeql`, `generate-c4-diagram` workflows; Dependabot auto-merge for semver-minor/patch
@@ -127,15 +144,15 @@ Spotless + ktlint enforce style on every build:
 
 ## Built with
 
-- [Kotlin](https://kotlinlang.org/) 2.3
-- [Ktor](https://ktor.io/) 3.5
-- [Exposed](https://github.com/JetBrains/Exposed) 1.3 (JDBC DSL with coroutine support)
-- [Flyway](https://flywaydb.org/) 12 (migrations)
-- [HikariCP](https://github.com/brettwooldridge/HikariCP) 7 (connection pool)
-- [Micrometer](https://micrometer.io/) (metrics)
-- [Kotest](https://kotest.io/) 6 + [MockK](https://mockk.io/) 1.14 (testing)
-- [Testcontainers](https://testcontainers.com/) (integration tests)
-- [Gradle](https://gradle.org/) 9.5 with the [`io.ktor.plugin`](https://ktor.io/docs/server-fatjar.html)
+- [Kotlin](https://kotlinlang.org/)
+- [Ktor](https://ktor.io/) (Netty engine)
+- [Exposed](https://github.com/JetBrains/Exposed) — JDBC DSL with coroutine support
+- [Flyway](https://flywaydb.org/) — migrations
+- [HikariCP](https://github.com/brettwooldridge/HikariCP) — connection pool
+- [Micrometer](https://micrometer.io/) — metrics
+- [Kotest](https://kotest.io/) + [MockK](https://mockk.io/) — testing
+- [Testcontainers](https://testcontainers.com/) — integration tests
+- [Gradle](https://gradle.org/) + [`io.ktor.plugin`](https://ktor.io/docs/server-fatjar.html)
 - [Docker](https://www.docker.com/)
 - [GitHub Actions](https://docs.github.com/en/actions)
 
