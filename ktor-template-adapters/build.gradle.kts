@@ -1,8 +1,18 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 plugins {
     id("ktor-template.kotlin-conventions")
     id("ktor-template.code-metrics")
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ktor)
+}
+
+tasks.named<ShadowJar>("shadowJar") {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    mergeServiceFiles()
+    filesNotMatching("META-INF/services/**") {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
 }
 
 // Adapters layer: Ktor entry point, input/http adapters, output/persistence adapters,
