@@ -1,0 +1,12 @@
+.git
+.github
+.gradle
+.idea
+.kotlin
+.DS_Store
+**/build
+**/.gradle
+**/bin
+docs
+*.md
+docker-compose.yml
