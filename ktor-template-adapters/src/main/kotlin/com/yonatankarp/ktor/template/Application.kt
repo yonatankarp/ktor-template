@@ -19,6 +19,7 @@ import io.ktor.server.application.install
 import io.ktor.server.netty.EngineMain
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.routing.routing
+import io.micrometer.core.instrument.MeterRegistry
 
 fun main(args: Array<String>): Unit = EngineMain.main(args)
 
@@ -29,7 +30,7 @@ fun Application.module() {
     configureCallLogging()
     val metricsRegistry = configureMetrics()
 
-    val greet = wireGreetings()
+    val greet = wireGreetings(metricsRegistry)
 
     routing {
         healthRoutes()
@@ -38,8 +39,8 @@ fun Application.module() {
     }
 }
 
-private fun Application.wireGreetings(): Greet {
-    val bus = InMemoryEventBus<GreetingDelivered>()
+private fun Application.wireGreetings(metricsRegistry: MeterRegistry): Greet {
+    val bus = InMemoryEventBus<GreetingDelivered>(metricsRegistry)
     logGreetingDeliveries(bus)
     return GreetUseCase(GreetingExposedCatalog(), bus)
 }
