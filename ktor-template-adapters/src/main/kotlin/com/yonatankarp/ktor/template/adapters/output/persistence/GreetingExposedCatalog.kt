@@ -5,13 +5,13 @@ import com.yonatankarp.ktor.template.domain.valueobject.Greeting
 import org.jetbrains.exposed.v1.core.Random
 import org.jetbrains.exposed.v1.jdbc.Database
 import org.jetbrains.exposed.v1.jdbc.selectAll
-import org.jetbrains.exposed.v1.jdbc.transactions.experimental.newSuspendedTransaction
+import org.jetbrains.exposed.v1.jdbc.transactions.suspendTransaction
 
 class GreetingExposedCatalog(
     private val database: Database,
 ) : GreetingCatalog {
     override suspend fun random(): Greeting? =
-        newSuspendedTransaction(db = database) {
+        suspendTransaction(db = database) {
             GreetingTable
                 .selectAll()
                 .orderBy(Random())
