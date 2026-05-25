@@ -18,6 +18,8 @@ jobs:
       pull-requests: write
       checks: write
     uses: yonatankarp/github-actions/.github/workflows/ci.yml@v2
+    with:
+      dockerfile-path: Dockerfile
 
   dependabot_auto_merge:
     name: Dependabot auto-merge
