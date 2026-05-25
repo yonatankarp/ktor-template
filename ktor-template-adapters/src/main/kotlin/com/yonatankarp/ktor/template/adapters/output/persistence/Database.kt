@@ -34,13 +34,19 @@ private fun createDataSource(config: ApplicationConfig): HikariDataSource {
             jdbcUrl = config.property("url").getString()
             username = config.property("username").getString()
             password = config.property("password").getString()
-            maximumPoolSize = config.property("maximumPoolSize").getString().toInt()
+            maximumPoolSize = config.intProperty("maximumPoolSize")
             isAutoCommit = false
             transactionIsolation = "TRANSACTION_READ_COMMITTED"
             poolName = "ktor-template-pool"
             validate()
         }
     return HikariDataSource(hikariConfig)
+}
+
+private fun ApplicationConfig.intProperty(key: String): Int {
+    val raw = property(key).getString()
+    return raw.toIntOrNull()
+        ?: error("$key must be an integer, got: '$raw'")
 }
 
 private fun runMigrations(dataSource: DataSource) {
