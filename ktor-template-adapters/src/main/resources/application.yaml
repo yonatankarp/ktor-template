@@ -7,6 +7,9 @@ ktor:
       - com.yonatankarp.ktor.template.ApplicationKt.module
   environment: ${KTOR_ENV:prod}
 
+ops:
+  port: ${OPS_PORT:9001}
+
 database:
   url: ${DB_URL}
   username: ${DB_USERNAME}

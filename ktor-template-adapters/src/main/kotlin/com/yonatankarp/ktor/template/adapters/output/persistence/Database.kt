@@ -1,5 +1,6 @@
 package com.yonatankarp.ktor.template.adapters.output.persistence
 
+import com.yonatankarp.ktor.template.adapters.output.intProperty
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import io.ktor.server.application.Application
@@ -41,12 +42,6 @@ private fun createDataSource(config: ApplicationConfig): HikariDataSource {
             validate()
         }
     return HikariDataSource(hikariConfig)
-}
-
-private fun ApplicationConfig.intProperty(key: String): Int {
-    val raw = property(key).getString()
-    return raw.toIntOrNull()
-        ?: error("$key must be an integer, got: '$raw'")
 }
 
 private fun runMigrations(dataSource: DataSource) {

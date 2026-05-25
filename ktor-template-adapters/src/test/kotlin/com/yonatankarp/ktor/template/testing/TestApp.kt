@@ -10,6 +10,7 @@ fun ApplicationTestBuilder.bootWith(postgres: PostgreSQLContainer<*>) {
         config =
             MapApplicationConfig(
                 "ktor.environment" to "test",
+                "ops.port" to "0",
                 "database.url" to postgres.jdbcUrl,
                 "database.username" to postgres.username,
                 "database.password" to postgres.password,

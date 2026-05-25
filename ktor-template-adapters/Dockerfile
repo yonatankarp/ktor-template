@@ -5,9 +5,10 @@ RUN ./gradlew :ktor-template-adapters:buildFatJar --no-daemon
 
 FROM eclipse-temurin:25-jre-alpine
 
-ENV SERVER_PORT="8080"
+ENV SERVER_PORT="8080" \
+    OPS_PORT="9001"
 
-EXPOSE ${SERVER_PORT}
+EXPOSE ${SERVER_PORT} ${OPS_PORT}
 
 RUN apk update && apk upgrade && apk add --no-cache curl
 

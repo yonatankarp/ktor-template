@@ -35,20 +35,6 @@ class GreetingsApiIntegrationTest :
                 body.message.shouldNotBeBlank()
             }
         }
-
-        test("GET /health returns OK") {
-            testApplication {
-                // Given
-                bootWith(postgres)
-
-                // When
-                val response = client.get("/health")
-
-                // Then
-                response.status shouldBe HttpStatusCode.OK
-                response.bodyAsText() shouldBe "OK"
-            }
-        }
     }) {
     companion object {
         private val SEEDED_LANGUAGES = setOf("en", "es", "fr", "de", "ja")

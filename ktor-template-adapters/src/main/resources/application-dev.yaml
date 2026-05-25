@@ -7,6 +7,9 @@ ktor:
       - com.yonatankarp.ktor.template.ApplicationKt.module
   environment: dev
 
+ops:
+  port: 9001
+
 database:
   url: jdbc:postgresql://localhost:5432/ktor-template
   username: postgres
