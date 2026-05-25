@@ -6,27 +6,24 @@ import io.ktor.server.application.Application
 import io.ktor.server.application.ApplicationStopping
 import io.ktor.server.application.log
 import io.ktor.server.config.ApplicationConfig
-import io.ktor.server.plugins.di.dependencies
 import org.flywaydb.core.Flyway
 import org.jetbrains.exposed.v1.jdbc.Database
 import javax.sql.DataSource
 
-fun Application.configureDatabase() {
+fun Application.configureDatabase(): Database {
     val cfg = environment.config.config("database")
     val dataSource = createDataSource(cfg)
 
-    runCatching {
+    return runCatching {
         runMigrations(dataSource)
-        Database.connect(dataSource)
-
-        dependencies {
-            provide<DataSource> { dataSource }
-        }
+        val database = Database.connect(dataSource)
 
         monitor.subscribe(ApplicationStopping) {
             log.info("Closing database connection pool")
             dataSource.close()
         }
+
+        database
     }.onFailure { dataSource.close() }
         .getOrThrow()
 }

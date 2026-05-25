@@ -20,17 +20,18 @@ import io.ktor.server.netty.EngineMain
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.routing.routing
 import io.micrometer.core.instrument.MeterRegistry
+import org.jetbrains.exposed.v1.jdbc.Database
 
 fun main(args: Array<String>): Unit = EngineMain.main(args)
 
 fun Application.module() {
-    configureDatabase()
+    val database = configureDatabase()
     install(ContentNegotiation) { json() }
     configureCallId()
     configureCallLogging()
     val metricsRegistry = configureMetrics()
 
-    val greet = wireGreetings(metricsRegistry)
+    val greet = wireGreetings(database, metricsRegistry)
 
     routing {
         healthRoutes()
@@ -39,8 +40,11 @@ fun Application.module() {
     }
 }
 
-private fun Application.wireGreetings(metricsRegistry: MeterRegistry): Greet {
+private fun Application.wireGreetings(
+    database: Database,
+    metricsRegistry: MeterRegistry,
+): Greet {
     val bus = InMemoryEventBus<GreetingDelivered>(metricsRegistry)
     logGreetingDeliveries(bus)
-    return GreetUseCase(GreetingExposedCatalog(), bus)
+    return GreetUseCase(GreetingExposedCatalog(database), bus)
 }
