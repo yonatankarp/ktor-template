@@ -3,6 +3,8 @@ package com.yonatankarp.ktor.template.adapters.output.observability
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
 import io.ktor.server.metrics.micrometer.MicrometerMetrics
+import io.ktor.server.plugins.di.dependencies
+import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.core.instrument.binder.jvm.ClassLoaderMetrics
 import io.micrometer.core.instrument.binder.jvm.JvmGcMetrics
 import io.micrometer.core.instrument.binder.jvm.JvmMemoryMetrics
@@ -14,7 +16,7 @@ import io.micrometer.prometheusmetrics.PrometheusConfig
 import io.micrometer.prometheusmetrics.PrometheusMeterRegistry
 import java.time.Duration
 
-fun Application.configureMetrics(): PrometheusMeterRegistry {
+fun Application.configureMetrics() {
     val registry = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
     install(MicrometerMetrics) {
         this.registry = registry
@@ -37,7 +39,10 @@ fun Application.configureMetrics(): PrometheusMeterRegistry {
                     Duration.ofMillis(SLO_SLOW_MS).toNanos().toDouble(),
                 ).build()
     }
-    return registry
+    dependencies {
+        provide<PrometheusMeterRegistry> { registry }
+        provide<MeterRegistry> { registry }
+    }
 }
 
 private const val MAX_EXPECTED_LATENCY_SECONDS = 10L
