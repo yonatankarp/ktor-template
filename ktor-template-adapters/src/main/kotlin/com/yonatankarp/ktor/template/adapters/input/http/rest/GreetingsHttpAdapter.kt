@@ -12,4 +12,4 @@ fun Route.greetingsRoutes(greet: Greet) {
     }
 }
 
-private fun Greeting.toResponse() = GreetingResponse(language = language, message = message)
+private fun Greeting.toResponse() = GreetingResponse(language = language.toLanguageTag(), message = message)
