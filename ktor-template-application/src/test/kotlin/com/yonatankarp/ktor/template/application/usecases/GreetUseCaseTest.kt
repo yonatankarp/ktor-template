@@ -6,8 +6,10 @@ import com.yonatankarp.ktor.template.domain.event.GreetingDelivered
 import com.yonatankarp.ktor.template.domain.valueobject.Greeting
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
@@ -22,7 +24,7 @@ class GreetUseCaseTest :
             val expected = Greeting(language = "fr", message = "Bonjour")
             coEvery { catalog.random() } returns expected
             val published = slot<GreetingDelivered>()
-            every { events.publish(capture(published)) } returns true
+            every { events.publish(capture(published)) } just Runs
             val useCase = GreetUseCase(catalog, events)
 
             // When
@@ -40,7 +42,7 @@ class GreetUseCaseTest :
             val events = mockk<EventPublisher<GreetingDelivered>>()
             coEvery { catalog.random() } returns null
             val published = slot<GreetingDelivered>()
-            every { events.publish(capture(published)) } returns true
+            every { events.publish(capture(published)) } just Runs
             val useCase = GreetUseCase(catalog, events)
 
             // When
