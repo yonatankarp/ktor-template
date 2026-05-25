@@ -3,9 +3,9 @@ package com.yonatankarp.ktor.template.testing
 import com.yonatankarp.ktor.template.module
 import io.ktor.server.config.MapApplicationConfig
 import io.ktor.server.testing.ApplicationTestBuilder
-import org.testcontainers.containers.PostgreSQLContainer
+import org.testcontainers.postgresql.PostgreSQLContainer
 
-fun ApplicationTestBuilder.bootWith(postgres: PostgreSQLContainer<*>) {
+fun ApplicationTestBuilder.bootWith(postgres: PostgreSQLContainer) {
     environment {
         config =
             MapApplicationConfig(
