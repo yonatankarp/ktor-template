@@ -10,7 +10,7 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.plugins.di.dependencies
 import io.ktor.server.routing.routing
 import io.ktor.server.testing.testApplication
-import org.testcontainers.containers.PostgreSQLContainer
+import org.testcontainers.postgresql.PostgreSQLContainer
 import javax.sql.DataSource
 
 class ReadinessHttpAdapterTest :
