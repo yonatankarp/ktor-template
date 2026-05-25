@@ -3,25 +3,31 @@ package com.yonatankarp.ktor.template.domain.valueobject
 import java.util.IllformedLocaleException
 import java.util.Locale
 
-data class Greeting(
-    val language: String,
+@ConsistentCopyVisibility
+data class Greeting private constructor(
+    val language: Locale,
     val message: String,
 ) {
     init {
-        require(isValidBcp47(language)) {
-            "language must be a valid BCP-47 tag (e.g. 'en', 'en-US', 'zh-Hant'), got: '$language'"
-        }
         require(message.isNotBlank()) { "message must not be blank" }
     }
 
     companion object {
-        private fun isValidBcp47(tag: String): Boolean {
-            if (tag.isBlank()) return false
+        operator fun invoke(
+            language: String,
+            message: String,
+        ): Greeting = Greeting(parseLanguageTag(language), message)
+
+        private fun parseLanguageTag(tag: String): Locale {
+            require(tag.isNotBlank()) {
+                "language must be a valid BCP-47 tag (e.g. 'en', 'en-US', 'zh-Hant'), got: '$tag'"
+            }
             return try {
                 Locale.Builder().setLanguageTag(tag).build()
-                true
             } catch (_: IllformedLocaleException) {
-                false
+                throw IllegalArgumentException(
+                    "language must be a valid BCP-47 tag (e.g. 'en', 'en-US', 'zh-Hant'), got: '$tag'",
+                )
             }
         }
     }

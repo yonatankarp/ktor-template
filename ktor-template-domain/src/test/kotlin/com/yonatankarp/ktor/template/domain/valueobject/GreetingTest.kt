@@ -4,6 +4,7 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
+import java.util.Locale
 
 class GreetingTest :
     FunSpec({
@@ -15,14 +16,22 @@ class GreetingTest :
                 "ja",
                 "pt-BR",
                 "en-US",
-                "en-us",
                 "zh-Hant",
                 "zh-Hant-CN",
                 "sr-Latn-RS",
                 "es-419",
-            ).forEach { language ->
-                Greeting(language = language, message = "Hello").language shouldBe language
+            ).forEach { tag ->
+                Greeting(language = tag, message = "Hello").language shouldBe Locale.forLanguageTag(tag)
             }
+        }
+
+        test("canonicalizes mixed-case region and script subtags") {
+            Greeting("en-us", "Hi").language.toLanguageTag() shouldBe "en-US"
+            Greeting("zh-hant", "Hi").language.toLanguageTag() shouldBe "zh-Hant"
+        }
+
+        test("treats canonical-equivalent language tags as equal") {
+            Greeting("en-us", "Hi") shouldBe Greeting("en-US", "Hi")
         }
 
         test("rejects invalid language tags") {
@@ -31,9 +40,9 @@ class GreetingTest :
                 "en_US",
                 "",
                 "   ",
-            ).forEach { language ->
+            ).forEach { tag ->
                 shouldThrow<IllegalArgumentException> {
-                    Greeting(language = language, message = "Hi")
+                    Greeting(language = tag, message = "Hi")
                 }
             }
         }
