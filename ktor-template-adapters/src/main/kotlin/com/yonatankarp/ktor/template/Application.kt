@@ -3,6 +3,7 @@ package com.yonatankarp.ktor.template
 import com.yonatankarp.ktor.template.adapters.input.http.rest.greetingsRoutes
 import com.yonatankarp.ktor.template.adapters.input.http.rest.healthRoutes
 import com.yonatankarp.ktor.template.adapters.input.http.rest.metricsRoutes
+import com.yonatankarp.ktor.template.adapters.input.http.rest.readyRoutes
 import com.yonatankarp.ktor.template.adapters.output.intProperty
 import com.yonatankarp.ktor.template.adapters.output.observability.InMemoryEventBus
 import com.yonatankarp.ktor.template.adapters.output.observability.configureCallId
@@ -26,55 +27,62 @@ import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.EngineMain
 import io.ktor.server.netty.Netty
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.server.plugins.di.dependencies
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.routing
 import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.prometheusmetrics.PrometheusMeterRegistry
 import org.jetbrains.exposed.v1.jdbc.Database
+import javax.sql.DataSource
 
 fun main(args: Array<String>): Unit = EngineMain.main(args)
 
 fun Application.module() {
-    val database = configureDatabase()
+    configureDatabase()
     install(ContentNegotiation) { json() }
     configureDefaultHeaders()
     configureCors()
     configureErrorHandling()
     configureCallId()
     configureCallLogging()
-    val metricsRegistry = configureMetrics()
+    configureMetrics()
+    wireGreetings()
 
-    val greet = wireGreetings(database, metricsRegistry)
-
-    startOpsEngine(environment.config.intProperty("ops.port"), metricsRegistry)
+    startOpsEngine(environment.config.intProperty("ops.port"))
 
     routing {
-        greetingsRoutes(greet)
+        greetingsRoutes()
     }
 }
 
-private fun Application.wireGreetings(
-    database: Database,
-    metricsRegistry: MeterRegistry,
-): Greet {
+private fun Application.wireGreetings() {
+    val database: Database by dependencies
+    val metricsRegistry: MeterRegistry by dependencies
     val bus = InMemoryEventBus<GreetingDelivered>(metricsRegistry)
     logGreetingDeliveries(bus)
-    return GreetUseCase(GreetingExposedCatalog(database), bus)
+    val greet: Greet = GreetUseCase(GreetingExposedCatalog(database), bus)
+    dependencies {
+        provide<Greet> { greet }
+    }
 }
 
-private fun Route.opsRoutes(metricsRegistry: PrometheusMeterRegistry) {
+private fun Route.opsRoutes() {
     healthRoutes()
-    metricsRoutes(metricsRegistry)
+    readyRoutes()
+    metricsRoutes()
 }
 
-private fun Application.startOpsEngine(
-    port: Int,
-    metricsRegistry: PrometheusMeterRegistry,
-) {
+private fun Application.startOpsEngine(port: Int) {
+    val dataSource: DataSource by dependencies
+    val metricsRegistry: PrometheusMeterRegistry by dependencies
     log.info("Starting ops engine on port {}", port)
     val server =
         embeddedServer(Netty, port = port, host = "0.0.0.0") {
-            routing { opsRoutes(metricsRegistry) }
+            dependencies {
+                provide<DataSource> { dataSource }
+                provide<PrometheusMeterRegistry> { metricsRegistry }
+            }
+            routing { opsRoutes() }
         }.start(wait = false)
     monitor.subscribe(ApplicationStopping) { server.stop(OPS_STOP_GRACE_MS, OPS_STOP_TIMEOUT_MS) }
 }
