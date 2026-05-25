@@ -6,6 +6,9 @@ import com.yonatankarp.ktor.template.adapters.input.http.rest.metricsRoutes
 import com.yonatankarp.ktor.template.adapters.output.observability.InMemoryEventBus
 import com.yonatankarp.ktor.template.adapters.output.observability.configureCallId
 import com.yonatankarp.ktor.template.adapters.output.observability.configureCallLogging
+import com.yonatankarp.ktor.template.adapters.output.observability.configureCors
+import com.yonatankarp.ktor.template.adapters.output.observability.configureDefaultHeaders
+import com.yonatankarp.ktor.template.adapters.output.observability.configureErrorHandling
 import com.yonatankarp.ktor.template.adapters.output.observability.configureMetrics
 import com.yonatankarp.ktor.template.adapters.output.observability.logGreetingDeliveries
 import com.yonatankarp.ktor.template.adapters.output.persistence.GreetingExposedCatalog
@@ -27,6 +30,9 @@ fun main(args: Array<String>): Unit = EngineMain.main(args)
 fun Application.module() {
     val database = configureDatabase()
     install(ContentNegotiation) { json() }
+    configureDefaultHeaders()
+    configureCors()
+    configureErrorHandling()
     configureCallId()
     configureCallLogging()
     val metricsRegistry = configureMetrics()
