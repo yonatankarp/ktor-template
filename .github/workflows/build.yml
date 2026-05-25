@@ -22,27 +22,11 @@ jobs:
       dockerfile-path: Dockerfile
 
   dependabot_auto_merge:
-    name: Dependabot auto-merge
     needs: pipeline
-    runs-on: ubuntu-latest
     if: ${{ github.actor == 'dependabot[bot]' }}
     permissions:
       contents: write
       pull-requests: write
-
-    steps:
-      - name: Dependabot metadata
-        id: metadata
-        uses: dependabot/fetch-metadata@v3
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
-      # Auto-merge minor and patch bumps only. Major bumps still require a human
-      # review. Repo must have auto-merge enabled in Settings → General for this
-      # to actually merge once required checks pass.
-      - name: Enable auto-merge for minor & patch updates
-        if: ${{ steps.metadata.outputs.update-type == 'version-update:semver-minor' || steps.metadata.outputs.update-type == 'version-update:semver-patch' }}
-        env:
-          PR_URL: ${{ github.event.pull_request.html_url }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh pr merge --auto --squash "$PR_URL"
+    uses: yonatankarp/github-actions/.github/workflows/dependabot-auto-merge.yml@v2
+    secrets:
+      GITHUB_PAT: ${{ secrets.REVIEWER_GITHUB_TOKEN }}
