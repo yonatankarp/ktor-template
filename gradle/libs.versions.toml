@@ -1,6 +1,6 @@
 [versions]
 
-exposed = "1.4.0"
+exposed = "1.5.0"
 flyway = "13.3.0"
 jacoco = "0.8.13"
 hikari = "7.1.0"
