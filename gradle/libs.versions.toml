@@ -1,7 +1,7 @@
 [versions]
 
 exposed = "1.6.1"
-flyway = "13.12.2"
+flyway = "13.13.0"
 jacoco = "0.8.13"
 hikari = "7.1.0"
 jvmTarget = "25"
